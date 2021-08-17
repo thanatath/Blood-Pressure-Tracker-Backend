@@ -46,6 +46,26 @@ app.get('/history', (req, res) => {
   res.end;
 });
 
+app.get('/del', (req, res) => {
+  if (req.query.idBlood) {
+    console.log('Get ID: ', req.query.idBlood);
+    delBlood(req.query.idBlood)
+  }
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.sendStatus(200);
+});
+
+
+function delBlood(idBlood){
+
+  var sql = "DELETE FROM EURO WHERE id = " + idBlood;
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("Number of records deleted: " + result.affectedRows);
+  });
+
+}
+
 function saveBlood(top, buttom) {
   var sql =
     'INSERT INTO EURO (top, buttom,time) VALUES (' +
