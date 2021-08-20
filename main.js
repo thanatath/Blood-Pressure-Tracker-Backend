@@ -30,8 +30,8 @@ con.connect(function (err) {
 
 app.get('/', (req, res) => {
   if (req.query.top > 0 && req.query.buttom > 0) {
-    console.log('Get Top: ', req.query.top, ' Buttom: ', req.query.buttom);
-    saveBlood(req.query.top, req.query.buttom);
+    console.log('Get Top: ', req.query.top, ' Buttom: ', req.query.buttom, ' HeartRate: ', req.query.heartrate);
+    saveBlood(req.query.top, req.query.buttom, req.query.heartrate);
   }
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendStatus(200);
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 app.get('/history', (req, res) => {
   con.query('SELECT * FROM EURO', function (err, result, fields) {
     if (err) throw err;
-   res.send(result)
+    res.send(result);
   });
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.end;
@@ -49,38 +49,31 @@ app.get('/history', (req, res) => {
 app.get('/del', (req, res) => {
   if (req.query.idBlood) {
     console.log('Get ID: ', req.query.idBlood);
-    delBlood(req.query.idBlood)
+    delBlood(req.query.idBlood);
   }
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.sendStatus(200);
 });
 
-
-function delBlood(idBlood){
-
-  var sql = "DELETE FROM EURO WHERE id = " + idBlood;
+function delBlood(idBlood) {
+  var sql = 'DELETE FROM EURO WHERE id = ' + idBlood;
   con.query(sql, function (err, result) {
     if (err) throw err;
-    console.log("Number of records deleted: " + result.affectedRows);
+    console.log('Number of records deleted: ' + result.affectedRows);
   });
-
 }
 
-function saveBlood(top, buttom) {
+function saveBlood(top, buttom,heartrate) {
   var sql =
-    'INSERT INTO EURO (top, buttom,time) VALUES (' +
+    'INSERT INTO EURO (top, buttom,heartrate,time) VALUES (' +
     top +
     ', ' +
     buttom +
+    ',' +
+    heartrate +
     ',NOW())';
   con.query(sql, function (err, result) {
     if (err) throw err;
     console.log('record inserted');
   });
 }
-
-
-  
- 
- 
-
